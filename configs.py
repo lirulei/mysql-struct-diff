@@ -11,3 +11,6 @@ mysql_dest_port = "3306"
 mysql_dest_user = "dts"
 mysql_dest_pass = "dts"
 mysql_dest_db = "dest_db"
+
+# 是否比较字符集和排序集
+check_charset_flag = False
