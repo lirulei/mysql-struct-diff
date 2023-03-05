@@ -1,0 +1,30 @@
+如果要比较字符集使用下面的:
+base_sql = '''
+SELECT
+ table_name,
+  column_name,
+ CASE WHEN `COLUMN_DEFAULT` IS NULL THEN '' ELSE `COLUMN_DEFAULT` END AS `COLUMN_DEFAULT` ,
+  IS_NULLABLE,
+  COLUMN_TYPE,
+  CASE WHEN CHARACTER_SET_NAME IS NULL THEN '' ELSE CHARACTER_SET_NAME END AS CHARACTER_SET_NAME ,
+  CASE WHEN COLLATION_NAME IS NULL THEN '' ELSE COLLATION_NAME END AS COLLATION_NAME ,
+  COLUMN_KEY,
+  EXTRA
+FROM
+  information_schema.columns where table_schema =
+'''
+
+
+如果不比较字符集，使用下面的:
+base_sql = '''
+SELECT
+ table_name,
+  column_name,
+ CASE WHEN `COLUMN_DEFAULT` IS NULL THEN '' ELSE `COLUMN_DEFAULT` END AS `COLUMN_DEFAULT` ,
+  IS_NULLABLE,
+  COLUMN_TYPE,
+  COLUMN_KEY,
+  EXTRA
+FROM
+  information_schema.columns where table_schema =
+'''
