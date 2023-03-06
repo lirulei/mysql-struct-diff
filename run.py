@@ -12,10 +12,8 @@ import difflib
 start_time = time.time()
 
 # 清除下历史文件
-try:
+if os.path.exists("compare.html"):
     os.remove("compare.html")
-except Exception as e:
-    print(str(e))
 
 # 源端
 source_db = mysql.connector.connect(
@@ -114,7 +112,7 @@ for i in src_tb_set:
     source_cursor.execute(get_src_tb_column_detail)
     src_tb_column_result = source_cursor.fetchall()
 
-    chk_sum = hashlib.md5(str(src_tb_column_result).replace(" ", "").encode()).hexdigest()
+    chk_sum = hashlib.md5(str(src_tb_column_result).encode()).hexdigest()
     source_chksum[i] = chk_sum
 
 # 4 采集目标库信息
@@ -127,7 +125,7 @@ for i in dest_tb_set:
     dest_cursor.execute(get_dest_tb_column_detail)
     dest_tb_column_result = dest_cursor.fetchall()
 
-    chk_sum = hashlib.md5(str(dest_tb_column_result).replace(" ", "").encode()).hexdigest()
+    chk_sum = hashlib.md5(str(dest_tb_column_result).encode()).hexdigest()
     dest_chksum[i] = chk_sum
 
 
@@ -140,7 +138,7 @@ if source_chksum != dest_chksum:
 
     for i in differ:
         # 如果要排除掉src和dest 存在差集的表（背景：有时候源库src已经建好表，但是尚未发布到生产dest去，这种情况下就出现了二者表的数量不一样多），用下面这种写法
-        # if i[0] not in list(dest_tb_set  - src_tb_set ) and i not in list(src_tb_set - dest_tb_set):
+        # if i[0] not in list(dest_tb_set  - src_tb_set ) and i[0] not in list(src_tb_set - dest_tb_set):
         #     s1.add(i[0])
 
         # 如果要全部都报出来，用下面这种写法
@@ -218,3 +216,4 @@ else:
 stop_time = time.time()
 time_dur = stop_time - start_time
 print(f"耗时 {time_dur} 秒")
+
